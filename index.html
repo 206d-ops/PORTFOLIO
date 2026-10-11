@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#05060f" />
+<title>DENMA SOLUTIONS · Denma · Frontend & IoT</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ========== CUSTOM CURSOR (desktop only) ========== -->
+<div class="cursor-dot"  id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- ========== BACKGROUND LAYERS ========== -->
+<div class="aurora-container">
+  <div class="aurora-blob blob-1"></div>
+  <div class="aurora-blob blob-2"></div>
+</div>
+<div class="mouse-glow" id="mouseGlow"></div>
+<canvas id="bg-canvas"></canvas>
+<canvas id="confettiCanvas" class="confetti-canvas"></canvas>
+
+<div class="container">
+
+  <!-- ========== HEADER ========== -->
+  <header>
+    <div class="logo"><i class="fas fa-microchip"></i> DENMA<span>SOLUTIONS</span></div>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="#home">Home</a>
+      <a href="#dashboard">Live</a>
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#feedback">Feedback</a>
+      <a href="#subscribe">Connect</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="icon-btn cmd-trigger" id="cmdTrigger" aria-label="Open command palette" title="Command palette (Ctrl+K)">
+        <i class="fas fa-terminal"></i>
+      </button>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation"><i class="fas fa-bars"></i></button>
+    </div>
+  </header>
+
+  <!-- ========== HERO ========== -->
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <span class="hero-badge"><span class="pulse-dot"></span> Available for collaboration</span>
+      <h1>Hi, I'm <span class="accent">Denis</span><br />I build for the web &amp; beyond.</h1>
+      <p class="typing-line"><span id="typed-text"></span><span class="cursor-blink">|</span></p>
+      <p class="hero-desc">Frontend developer crafting clean, interactive experiences with HTML, CSS, JavaScript &amp; C++. Currently exploring Arduino and the Internet of Things.</p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn btn-primary magnetic"><i class="fas fa-rocket"></i> View Projects</a>
+        <a href="#subscribe" class="btn btn-outline magnetic"><i class="fas fa-paper-plane"></i> Let's Connect</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><h4 data-count="6">0</h4><span>Projects</span></div>
+        <div class="stat"><h4 data-count="7">0</h4><span>Tech Skills</span></div>
+        <div class="stat"><h4 data-count="100">0</h4><span>% Passion</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="chip-wrap" id="chipWrap">
+        <div class="glowing-chip">
+          <div class="orbit orbit-1"></div>
+          <div class="orbit orbit-2"></div>
+          <div class="orbit orbit-3"></div>
+          <div class="chip-photo">
+            <img src="profile.jpg" alt="Denma" class="profile-img"
+                 onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#00e6d4,#8b5cf6)';" />
+            <span class="chip-spotlight"></span>
+            <span class="chip-shine"></span>
+          </div>
+          <span class="chip-ring"></span>
+          <span class="chip-pulse"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== LIVE DASHBOARD ========== -->
+  <section class="dashboard-section" id="dashboard">
+    <h2 data-scramble>Live Dashboard</h2>
+    <p class="section-subtitle">Real-time data from your browser — clock, calendar &amp; system status.</p>
+
+    <div class="dashboard-grid">
+
+      <div class="dash-card clock-card">
+        <div class="clock-face">
+          <span class="clock-tick t12"></span><span class="clock-tick t3"></span>
+          <span class="clock-tick t6"></span><span class="clock-tick t9"></span>
+          <div class="clock-hand hour"   id="clkHour"></div>
+          <div class="clock-hand minute" id="clkMin"></div>
+          <div class="clock-hand second" id="clkSec"></div>
+          <div class="clock-center"></div>
+        </div>
+        <div class="clock-digital" id="clkDigital">00:00:00</div>
+        <div class="clock-date" id="clkDate">Loading…</div>
+      </div>
+
+      <div class="dash-card calendar-card">
+        <div class="dash-head"><i class="fas fa-calendar-day"></i> <span id="calMonth">—</span></div>
+        <div class="cal-grid" id="calGrid"></div>
+      </div>
+
+      <div class="dash-card status-card">
+        <div class="dash-head"><i class="fas fa-heart-pulse"></i> System Status</div>
+        <div class="status-row"><span>Network</span><b id="stNet" class="ok">Online</b></div>
+        <div class="status-row"><span>Battery</span><b id="stBat">—</b></div>
+        <div class="status-row"><span>Screen</span><b id="stScreen">—</b></div>
+        <div class="status-row"><span>Timezone</span><b id="stTz">—</b></div>
+        <div class="status-row"><span>Visits</span><b id="stVisits" class="accent-text">0</b></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========== ABOUT ========== -->
+  <section class="about-section" id="about">
+    <h2 data-scramble>About Me</h2>
+    <p class="section-subtitle">A short introduction to who I am and what drives me.</p>
+    <div class="about-grid">
+      <div class="about-card"><i class="fas fa-code-branch"></i><h3>Builder at Heart</h3><p>I turn ideas into interactive experiences — from pixel-perfect frontends to hardware prototypes that sense the real world.</p></div>
+      <div class="about-card"><i class="fas fa-graduation-cap"></i><h3>Always Learning</h3><p>IT student with a strong curiosity for web technologies, IoT, and the little details that make interfaces feel alive.</p></div>
+      <div class="about-card"><i class="fas fa-bolt"></i><h3>Fast &amp; Clean</h3><p>I care about performance, accessibility, and code that other humans can read six months from now.</p></div>
+    </div>
+  </section>
+
+  <!-- ========== SKILLS ========== -->
+  <section class="skills-section" id="skills">
+    <h2 data-scramble>Tech &amp; Tools</h2>
+    <p class="section-subtitle">The languages, frameworks, and hardware I work with.</p>
+    <div class="skills-grid">
+      <div class="skill-tag"><i class="fab fa-html5"></i> HTML5</div>
+      <div class="skill-tag"><i class="fab fa-css3-alt"></i> CSS3</div>
+      <div class="skill-tag"><i class="fab fa-js"></i> JavaScript</div>
+      <div class="skill-tag"><i class="fas fa-code"></i> C++</div>
+      <div class="skill-tag"><i class="fas fa-microchip"></i> Arduino</div>
+      <div class="skill-tag"><i class="fas fa-cloud-sun"></i> API Integration</div>
+      <div class="skill-tag"><i class="fas fa-mobile-alt"></i> Responsive Design</div>
+      <div class="skill-tag"><i class="fas fa-gamepad"></i> Game Logic</div>
+      <div class="skill-tag"><i class="fab fa-git-alt"></i> Git &amp; GitHub</div>
+      <div class="skill-tag"><i class="fas fa-database"></i> LocalStorage</div>
+    </div>
+  </section>
+
+  <!-- ========== PROJECTS ========== -->
+  <section class="projects-section" id="projects">
+    <h2 data-scramble>Featured Projects</h2>
+    <p class="section-subtitle">Tap any card to launch its live app right here.</p>
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <div class="project-preview preview-weather">
+          <div class="preview-scene">
+            <div class="sun"></div>
+            <div class="cloud cloud-1"></div><div class="cloud cloud-2"></div><div class="cloud cloud-3"></div>
+            <div class="rain"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="temp-readout">24°</div>
+          </div>
+          <div class="preview-overlay"><i class="fas fa-play"></i></div>
+        </div>
+        <div class="project-body">
+          <h3>Weather API</h3>
+          <p>Real-time weather dashboard fetching from Open-Meteo. Dynamic backgrounds, search by city, and clean UI.</p>
+          <div class="tech-stack"><span>JavaScript</span><span>API</span><span>CSS3</span></div>
+          <a href="#" class="project-link">Live Demo <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-preview preview-snake">
+          <div class="preview-scene">
+            <div class="snake-grid"></div>
+            <div class="snake-body"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="snake-food"></div>
+            <div class="snake-score">SCORE: 042</div>
+          </div>
+          <div class="preview-overlay"><i class="fas fa-play"></i></div>
+        </div>
+        <div class="project-body">
+          <h3>Snake Game</h3>
+          <p>Classic snake game on HTML5 canvas with score tracking, speed increase, and keyboard + touch controls.</p>
+          <div class="tech-stack"><span>JavaScript</span><span>Canvas</span><span>Game</span></div>
+          <a href="#" class="project-link">Play Now <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-preview preview-todo">
+          <div class="preview-scene">
+            <div class="todo-window">
+              <div class="todo-bar"></div>
+              <div class="todo-item"><span class="check"></span><span class="todo-line"></span></div>
+              <div class="todo-item"><span class="check"></span><span class="todo-line short"></span></div>
+              <div class="todo-item"><span class="check"></span><span class="todo-line"></span></div>
+              <div class="todo-item"><span class="check"></span><span class="todo-line"></span></div>
+            </div>
+          </div>
+          <div class="preview-overlay"><i class="fas fa-play"></i></div>
+        </div>
+        <div class="project-body">
+          <h3>To-Do List App</h3>
+          <p>Task manager with local storage, add/delete/complete features, filter by status, and a minimal interface.</p>
+          <div class="tech-stack"><span>JavaScript</span><span>LocalStorage</span><span>CRUD</span></div>
+          <a href="#" class="project-link">Live Demo <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-preview preview-calc">
+          <div class="preview-scene">
+            <div class="calc-window">
+              <div class="calc-display"><span class="calc-num"><span></span></span></div>
+              <div class="calc-keys"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
+          </div>
+          <div class="preview-overlay"><i class="fas fa-play"></i></div>
+        </div>
+        <div class="project-body">
+          <h3>Simple Calculator</h3>
+          <p>Fully functional calculator with keyboard support, calculation history, and a responsive button grid.</p>
+          <div class="tech-stack"><span>JavaScript</span><span>CSS Grid</span><span>Math</span></div>
+          <a href="#" class="project-link">Try it <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-preview preview-ttt">
+          <div class="preview-scene">
+            <div class="ttt-grid">
+              <span class="cell x">×</span><span class="cell"></span><span class="cell o">○</span>
+              <span class="cell"></span><span class="cell x">×</span><span class="cell"></span>
+              <span class="cell o">○</span><span class="cell"></span><span class="cell x">×</span>
+            </div>
+            <div class="ttt-winner">X WINS</div>
+          </div>
+          <div class="preview-overlay"><i class="fas fa-play"></i></div>
+        </div>
+        <div class="project-body">
+          <h3>Tic Tac Toe</h3>
+          <p>Two-player Tic Tac Toe with win detection, draw handling, score tracking, and a sleek dark theme.</p>
+          <div class="tech-stack"><span>JavaScript</span><span>Game</span><span>DOM</span></div>
+          <a href="#" class="project-link">Play Game <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-preview preview-arduino">
+          <div class="preview-scene">
+            <div class="arduino-board">
+              <div class="arduino-chip"></div>
+              <div class="arduino-pins"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
+            <div class="arduino-leds"><span class="led led-1"></span><span class="led led-2"></span><span class="led led-3"></span></div>
+            <div class="arduino-wave">
+              <svg viewBox="0 0 200 40" preserveAspectRatio="none"><path d="M0,20 Q10,0 20,20 T40,20 T60,20 T80,20 T100,20 T120,20 T140,20 T160,20 T180,20 T200,20"/></svg>
+            </div>
+          </div>
+          <div class="preview-overlay"><i class="fas fa-play"></i></div>
+        </div>
+        <div class="project-body">
+          <h3>Arduino Lab</h3>
+          <p>Currently learning: sensors, serial communication, LED matrices, and mini IoT prototypes. Stay tuned!</p>
+          <div class="tech-stack"><span>Arduino</span><span>C++</span><span>IoT</span></div>
+          <a href="#" class="project-link">In Progress <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========== FEEDBACK ========== -->
+  <section class="feedback-section" id="feedback">
+    <h2 data-scramble>Share Your Feedback</h2>
+    <p class="section-subtitle">Your thoughts help me build better. Rate your visit and tell me what you think.</p>
+
+    <form class="glass-form" id="feedbackForm" novalidate>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="fbName">Your Name</label>
+          <input type="text" id="fbName" placeholder="Jane Doe" autocomplete="name" required />
+          <span class="err-msg"></span>
+        </div>
+        <div class="form-group">
+          <label for="fbEmail">Email Address</label>
+          <input type="email" id="fbEmail" placeholder="jane@example.com" autocomplete="email" required />
+          <span class="err-msg"></span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>How would you rate this portfolio?</label>
+        <div class="star-rating" id="starRating" data-value="0" role="radiogroup" aria-label="Rating">
+          <button type="button" data-star="1" aria-label="1 star"><i class="fas fa-star"></i></button>
+          <button type="button" data-star="2" aria-label="2 stars"><i class="fas fa-star"></i></button>
+          <button type="button" data-star="3" aria-label="3 stars"><i class="fas fa-star"></i></button>
+          <button type="button" data-star="4" aria-label="4 stars"><i class="fas fa-star"></i></button>
+          <button type="button" data-star="5" aria-label="5 stars"><i class="fas fa-star"></i></button>
+          <span class="rating-label" id="ratingLabel">Tap to rate</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="fbMessage">Your Message</label>
+        <textarea id="fbMessage" rows="4" placeholder="I love the…" required></textarea>
+        <span class="err-msg"></span>
+      </div>
+
+      <button type="submit" class="btn btn-primary magnetic"><i class="fas fa-paper-plane"></i> Send Feedback</button>
+      <p class="form-note">Prefer email? <a href="mailto:denisotieno955@gmail.com">denisotieno955@gmail.com</a></p>
+    </form>
+  </section>
+
+  <!-- ========== SUBSCRIBE / LEAD CAPTURE ========== -->
+  <section class="subscribe-section" id="subscribe">
+    <h2 data-scramble>Let's Stay Connected</h2>
+    <p class="section-subtitle">Drop your details and I'll reach out when there's something worth sharing.</p>
+
+    <form class="glass-form" id="subscribeForm" novalidate>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="subName">Full Name</label>
+          <input type="text" id="subName" placeholder="Your name" autocomplete="name" required />
+          <span class="err-msg"></span>
+        </div>
+        <div class="form-group">
+          <label for="subEmail">Email Address</label>
+          <input type="email" id="subEmail" placeholder="you@example.com" autocomplete="email" required />
+          <span class="err-msg"></span>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="subPhone">Phone Number</label>
+          <input type="tel" id="subPhone" placeholder="+254 700 000 000" autocomplete="tel" required />
+          <span class="err-msg"></span>
+        </div>
+        <div class="form-group">
+          <label for="subInterest">I'm interested in</label>
+          <select id="subInterest">
+            <option value="hire">Hiring you</option>
+            <option value="collab">Collaboration</option>
+            <option value="learn">Learning together</option>
+            <option value="hi">Just saying hi</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary magnetic"><i class="fas fa-handshake"></i> Connect With Me</button>
+      <p class="form-note">Your data stays on your device — nothing is uploaded anywhere.</p>
+    </form>
+  </section>
+
+  <!-- ========== CONTACT ========== -->
+  <section class="contact-section" id="contact">
+    <div class="contact-header">
+      <h2 data-scramble>Find Me Online</h2>
+      <p>Hover the icons and watch them dance. I'm always open to collaborate or chat.</p>
+    </div>
+    <div class="social-grid">
+      <a href="https://www.linkedin.com/in/denis-otieno-26699631b" target="_blank" rel="noopener" class="social-card dance-swing">
+        <span class="social-icon"><i class="fab fa-linkedin-in"></i></span><span class="social-label">LinkedIn</span>
+      </a>
+      <a href="https://github.com/206d-ops" target="_blank" rel="noopener" class="social-card dance-bounce">
+        <span class="social-icon"><i class="fab fa-github"></i></span><span class="social-label">GitHub</span>
+      </a>
+      <a href="https://wa.me/254751263862" target="_blank" rel="noopener" class="social-card dance-ring">
+        <span class="social-icon"><i class="fab fa-whatsapp"></i></span><span class="social-label">WhatsApp</span>
+      </a>
+      <a href="https://twitter.com/@mr_206d" target="_blank" rel="noopener" class="social-card dance-flip">
+        <span class="social-icon"><i class="fab fa-twitter"></i></span><span class="social-label">Twitter</span>
+      </a>
+    </div>
+    <div class="email-wrap">
+      <a href="mailto:denisotieno955@gmail.com" class="email-highlight"><i class="fas fa-envelope"></i>denisotieno955@gmail.com</a>
+      <i class="fas fa-copy copy-icon" id="copyEmail" title="Copy email"></i>
+    </div>
+  </section>
+
+  <footer>
+    <p>© <span id="year"></span> <span class="footer-brand">DENMA SOLUTIONS</span> — built with <i class="fas fa-heart" style="color:var(--primary)"></i> by Denma</p>
+    <p class="footer-sub">IT Student · Frontend &amp; Arduino Enthusiast</p>
+  </footer>
+
+</div>
+
+<button id="scrollTop" class="scroll-top" aria-label="Scroll to top"><i class="fas fa-arrow-up"></i></button>
+<div id="toast" class="toast"></div>
+
+<!-- ========== COMMAND PALETTE ========== -->
+<div class="cmd-modal" id="cmdModal" role="dialog" aria-label="Command palette">
+  <div class="cmd-backdrop" data-cmd-close></div>
+  <div class="cmd-window">
+    <div class="cmd-input-wrap">
+      <i class="fas fa-search"></i>
+      <input type="text" id="cmdInput" placeholder="Type a command or search…" autocomplete="off" />
+      <kbd>ESC</kbd>
+    </div>
+    <div class="cmd-list" id="cmdList"></div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
